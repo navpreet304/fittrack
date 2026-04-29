@@ -1,4 +1,4 @@
-# FitTrack Pro ![Coverage](coverage.svg)
+# FitTrack Pro ![Tests](https://github.com/navpreet304/fittrack/actions/workflows/ci.yml/badge.svg) ![Coverage](coverage.svg)
 
 Smart Workout, Nutrition & Progress Manager — built for HealthHub.
 
