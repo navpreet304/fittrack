@@ -1,4 +1,4 @@
-# FitTrack Pro
+# FitTrack Pro ![Coverage](coverage.svg)
 
 Smart Workout, Nutrition & Progress Manager — built for HealthHub.
 
