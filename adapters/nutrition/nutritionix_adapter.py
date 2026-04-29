@@ -1,5 +1,5 @@
 import os
-import requests
+import requests  # type: ignore[import-untyped]
 import requests_cache
 from typing import List
 
@@ -32,7 +32,7 @@ class NutritionixAdapter(NutritionAPIClient):
 
     BASE_URL = "https://trackapi.nutritionix.com/v2"
 
-    _FALLBACK_FOODS = [
+    _FALLBACK_FOODS: List[dict] = [
         {"name": "Chicken Breast (100g)", "calories": 165, "protein_g": 31, "carbs_g": 0, "fat_g": 3.6},
         {"name": "Brown Rice (100g)", "calories": 216, "protein_g": 4.5, "carbs_g": 45, "fat_g": 1.8},
         {"name": "Banana", "calories": 89, "protein_g": 1.1, "carbs_g": 23, "fat_g": 0.3},

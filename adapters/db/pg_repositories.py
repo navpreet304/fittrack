@@ -1,6 +1,6 @@
 import json
 from datetime import date, datetime
-from typing import List, Optional
+from typing import List, Optional, cast
 
 from sqlalchemy.orm import Session as DBSession
 
@@ -23,21 +23,21 @@ from ports.repositories import (
 
 def _user_to_domain(row: UserModel) -> User:
     u = User(
-        email=row.email,
-        first_name=row.first_name,
-        last_name=row.last_name,
-        date_of_birth=row.date_of_birth,
-        role=row.role,
-        id=row.id,
-        height_cm=row.height_cm,
-        fitness_level=row.fitness_level,
+        email=str(row.email),
+        first_name=str(row.first_name),
+        last_name=str(row.last_name),
+        date_of_birth=cast(date, row.date_of_birth),
+        role=str(row.role),
+        id=cast(Optional[int], row.id),
+        height_cm=cast(Optional[float], row.height_cm),
+        fitness_level=cast(Optional[str], row.fitness_level),
     )
-    u.hashed_password = row.hashed_password
+    u.hashed_password = cast(Optional[str], row.hashed_password)
     return u
 
 
 def _session_to_domain(row: WorkoutSessionModel) -> WorkoutSession:
-    raw = json.loads(row.exercises_json or "[]")
+    raw = json.loads(str(row.exercises_json or "[]"))
     exercises = [
         Exercise(
             name=e["name"],
@@ -49,16 +49,16 @@ def _session_to_domain(row: WorkoutSessionModel) -> WorkoutSession:
         for e in raw
     ]
     return WorkoutSession(
-        user_id=row.user_id,
-        session_date=row.session_date,
+        user_id=int(row.user_id),
+        session_date=cast(date, row.session_date),
         exercises=exercises,
-        id=row.id,
-        synced=row.synced,
+        id=cast(Optional[int], row.id),
+        synced=bool(row.synced),
     )
 
 
 def _meal_to_domain(row: MealEntryModel) -> MealEntry:
-    raw = json.loads(row.food_items_json or "[]")
+    raw = json.loads(str(row.food_items_json or "[]"))
     items = [
         FoodItem(
             name=f["name"],
@@ -71,12 +71,12 @@ def _meal_to_domain(row: MealEntryModel) -> MealEntry:
         for f in raw
     ]
     return MealEntry(
-        user_id=row.user_id,
-        meal_name=row.meal_name,
+        user_id=int(row.user_id),
+        meal_name=str(row.meal_name),
         food_items=items,
-        logged_at=row.logged_at,
-        id=row.id,
-        sync_status=row.sync_status,
+        logged_at=cast(datetime, row.logged_at),
+        id=cast(Optional[int], row.id),
+        sync_status=str(row.sync_status),
     )
 
 
@@ -99,7 +99,7 @@ class PGUserRepository(UserRepository):
         self._db.add(row)
         self._db.commit()
         self._db.refresh(row)
-        user.id = row.id
+        user.id = int(row.id)
         return user
 
     def get_by_id(self, user_id: int) -> Optional[User]:
@@ -141,7 +141,7 @@ class PGWorkoutSessionRepository(WorkoutSessionRepository):
         self._db.add(row)
         self._db.commit()
         self._db.refresh(row)
-        session.id = row.id
+        session.id = int(row.id)
         return session
 
     def get_by_user(self, user_id: int, start: date, end: date) -> List[WorkoutSession]:
@@ -188,7 +188,7 @@ class PGMealEntryRepository(MealEntryRepository):
         self._db.add(row)
         self._db.commit()
         self._db.refresh(row)
-        meal.id = row.id
+        meal.id = int(row.id)
         return meal
 
     def get_by_user(self, user_id: int, start: date, end: date) -> List[MealEntry]:
@@ -229,7 +229,7 @@ class PGBodyMeasurementRepository(BodyMeasurementRepository):
         self._db.add(row)
         self._db.commit()
         self._db.refresh(row)
-        m.id = row.id
+        m.id = int(row.id)
         return m
 
     def get_by_user(self, user_id: int, start: date, end: date) -> List[BodyMeasurement]:
@@ -244,13 +244,13 @@ class PGBodyMeasurementRepository(BodyMeasurementRepository):
         )
         return [
             BodyMeasurement(
-                user_id=r.user_id,
-                measurement_type=r.measurement_type,
-                value=r.value,
-                unit=r.unit,
-                recorded_date=r.recorded_date,
-                notes=r.notes,
-                id=r.id,
+                user_id=int(r.user_id),
+                measurement_type=str(r.measurement_type),
+                value=float(r.value),
+                unit=str(r.unit),
+                recorded_date=cast(date, r.recorded_date),
+                notes=str(r.notes),
+                id=cast(Optional[int], r.id),
             )
             for r in rows
         ]
@@ -274,21 +274,21 @@ class PGFitnessGoalRepository(FitnessGoalRepository):
         self._db.add(row)
         self._db.commit()
         self._db.refresh(row)
-        goal.id = row.id
+        goal.id = int(row.id)
         return goal
 
     def get_by_user(self, user_id: int) -> List[FitnessGoal]:
         rows = self._db.query(FitnessGoalModel).filter_by(user_id=user_id).all()
         return [
             FitnessGoal(
-                user_id=r.user_id,
-                description=r.description,
-                target_value=r.target_value,
-                current_value=r.current_value,
-                unit=r.unit,
-                deadline=r.deadline,
-                status=r.status,
-                id=r.id,
+                user_id=int(r.user_id),
+                description=str(r.description),
+                target_value=float(r.target_value),
+                current_value=float(r.current_value),
+                unit=str(r.unit),
+                deadline=cast(date, r.deadline),
+                status=str(r.status),
+                id=cast(Optional[int], r.id),
             )
             for r in rows
         ]
@@ -297,8 +297,8 @@ class PGFitnessGoalRepository(FitnessGoalRepository):
         row = self._db.get(FitnessGoalModel, goal.id)
         if not row:
             raise ValueError(f"Goal {goal.id} not found")
-        row.status = goal.status
-        row.current_value = goal.current_value
+        row.status = goal.status  # type: ignore[assignment]
+        row.current_value = goal.current_value  # type: ignore[assignment]
         self._db.commit()
         return goal
 
@@ -319,19 +319,19 @@ class PGBadgeRepository(BadgeRepository):
         self._db.add(row)
         self._db.commit()
         self._db.refresh(row)
-        badge.id = row.id
+        badge.id = int(row.id)
         return badge
 
     def get_by_user(self, user_id: int) -> List[Badge]:
         rows = self._db.query(BadgeModel).filter_by(user_id=user_id).all()
         return [
             Badge(
-                user_id=r.user_id,
-                name=r.name,
-                description=r.description,
-                condition=r.condition,
-                date_awarded=r.date_awarded,
-                id=r.id,
+                user_id=int(r.user_id),
+                name=str(r.name),
+                description=str(r.description),
+                condition=str(r.condition),
+                date_awarded=cast(Optional[date], r.date_awarded),
+                id=cast(Optional[int], r.id),
             )
             for r in rows
         ]
@@ -353,19 +353,19 @@ class PGNotificationRepository(NotificationRepository):
         self._db.add(row)
         self._db.commit()
         self._db.refresh(row)
-        notif.id = row.id
+        notif.id = int(row.id)
         return notif
 
     def get_pending(self) -> List[Notification]:
         rows = self._db.query(NotificationModel).filter_by(status="pending").all()
         return [
             Notification(
-                user_id=r.user_id,
-                message=r.message,
-                channel=r.channel,
-                status=r.status,
-                scheduled_at=r.scheduled_at,
-                id=r.id,
+                user_id=int(r.user_id),
+                message=str(r.message),
+                channel=str(r.channel),
+                status=str(r.status),
+                scheduled_at=cast(Optional[datetime], r.scheduled_at),
+                id=cast(Optional[int], r.id),
             )
             for r in rows
         ]
@@ -374,7 +374,7 @@ class PGNotificationRepository(NotificationRepository):
         row = self._db.get(NotificationModel, notif.id)
         if not row:
             raise ValueError(f"Notification {notif.id} not found")
-        row.status = notif.status
-        row.sent_at = notif.sent_at
+        row.status = notif.status  # type: ignore[assignment]
+        row.sent_at = notif.sent_at  # type: ignore[assignment]
         self._db.commit()
         return notif

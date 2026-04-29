@@ -114,7 +114,7 @@ def add_measurement(user_id: int):
     if caller_id != user_id:
         return jsonify({"error": "Forbidden"}), 403
 
-    data = request.get_json(silent=True)
+    data = request.get_json(silent=True) or {}
     required = ["measurement_type", "value", "unit", "recorded_date"]
     missing = [f for f in required if f not in data]
     if missing:
@@ -162,7 +162,7 @@ def get_badges(user_id: int):
             "name": b.name,
             "description": b.description,
             "condition": b.condition,
-            "date_awarded": b.date_awarded.isoformat(),
+            "date_awarded": b.date_awarded.isoformat() if b.date_awarded else None,
         }
         for b in badges
     ]), 200
@@ -175,7 +175,7 @@ def add_goal(user_id: int):
     if caller_id != user_id:
         return jsonify({"error": "Forbidden"}), 403
 
-    data = request.get_json(silent=True)
+    data = request.get_json(silent=True) or {}
     required = ["description", "target_value", "unit", "deadline"]
     missing = [f for f in required if f not in data]
     if missing:
