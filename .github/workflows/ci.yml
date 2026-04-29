@@ -53,10 +53,9 @@ jobs:
         run: pytest --cov=. --cov-report=xml --cov-fail-under=80
 
       - name: Generate coverage badge
-        uses: tj-actions/coverage-badge-py@v2
-        with:
-          output: coverage.svg
-          overwrite: true
+        run: |
+          pip install "setuptools<81" coverage-badge
+          coverage-badge -o coverage.svg -f
 
       - name: Upload coverage report
         uses: codecov/codecov-action@v4
