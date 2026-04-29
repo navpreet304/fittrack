@@ -1,0 +1,11 @@
+[run]
+omit =
+    seed.py
+    app.py
+    */migrations/*
+
+[report]
+omit =
+    seed.py
+    app.py
+    */migrations/*

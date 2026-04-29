@@ -1,0 +1,8 @@
+__pycache__/
+.git/
+.pytest_cache/
+.mypy_cache/
+htmlcov/
+coverage.xml
+pwa/dist/
+pwa/node_modules/
