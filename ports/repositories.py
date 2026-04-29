@@ -8,7 +8,6 @@ from domain.entities.workout_session import WorkoutSession
 from domain.entities.meal_entry import MealEntry
 from domain.entities.body_measurement import BodyMeasurement
 from domain.entities.badge_notification import Badge, Notification
-from domain.entities.progress_report import ProgressReport
 
 
 class UserRepository(ABC):

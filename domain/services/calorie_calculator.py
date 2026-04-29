@@ -1,5 +1,5 @@
 from datetime import date
-from typing import List, Optional
+from typing import List
 from domain.entities.meal_entry import MealEntry
 from domain.entities.user import User
 

@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from typing import List, Optional
+from typing import List
 import statistics
 
 from domain.entities.body_measurement import BodyMeasurement

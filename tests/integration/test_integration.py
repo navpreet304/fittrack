@@ -14,11 +14,11 @@ from unittest.mock import MagicMock, patch
 import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 
-from adapters.api.app import create_app
-from adapters.db.models import Base
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-import adapters.nutrition.nutritionix_adapter as nutrition_module
+from adapters.api.app import create_app  # noqa: E402
+from adapters.db.models import Base  # noqa: E402
+from sqlalchemy import create_engine  # noqa: E402
+from sqlalchemy.orm import sessionmaker  # noqa: E402
+import adapters.nutrition.nutritionix_adapter as nutrition_module  # noqa: E402
 
 
 # ---------------------------------------------------------------------------

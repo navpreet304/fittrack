@@ -1,6 +1,6 @@
 from datetime import date
 
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token
 
 from adapters.db.pg_repositories import PGUserRepository

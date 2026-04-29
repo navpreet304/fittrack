@@ -1,7 +1,7 @@
 import io
 from datetime import date, timedelta
 
-from flask import Blueprint, request, jsonify, current_app, send_file
+from flask import Blueprint, request, jsonify, send_file
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
 from adapters.db.pg_repositories import (
@@ -10,7 +10,7 @@ from adapters.db.pg_repositories import (
     PGBadgeRepository
 )
 from adapters.api.report_generator import ReportGenerator
-from domain.entities.body_measurement import BodyMeasurement, MEASUREMENT_TYPES
+from domain.entities.body_measurement import BodyMeasurement
 from domain.entities.fitness_goal import FitnessGoal
 from domain.services.progress_analyser import ProgressAnalyser
 

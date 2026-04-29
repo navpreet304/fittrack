@@ -12,7 +12,7 @@ from adapters.api.routes_coach import coach_bp
 from adapters.api.routes_top_level import (
     goals_bp, measurements_bp, notifications_bp,
 )
-import adapters.api.routes_top_level  # registers extra GET handlers on existing bps
+import adapters.api.routes_top_level  # noqa: F401 — registers extra GET handlers on existing bps
 
 
 def create_app():

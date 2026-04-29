@@ -5,7 +5,7 @@ so the resource is always derived from the JWT identity.
 """
 from datetime import date, datetime
 
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from adapters.db.pg_repositories import (
@@ -129,6 +129,7 @@ def list_measurements():
         }
         for r in rows
     ]), 200
+
 
 @measurements_bp.post("")
 @jwt_required()

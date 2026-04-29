@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date
 from typing import List
 
 from domain.entities.workout_session import WorkoutSession

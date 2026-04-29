@@ -1,7 +1,4 @@
 import io
-import csv
-from datetime import date
-from typing import List
 
 import pandas as pd
 from reportlab.lib.pagesizes import A4

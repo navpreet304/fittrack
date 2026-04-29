@@ -1,7 +1,7 @@
 import csv
 from datetime import date, timedelta
 
-from flask import Blueprint, request, jsonify, current_app, send_file
+from flask import Blueprint, request, jsonify, send_file
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 import io
 
@@ -95,6 +95,7 @@ def _build_csv(client, sessions, meals, measurements, goals, start, end) -> byte
         writer.writerow(["Weight Change (kg)", "insufficient data"])
 
     return buf.getvalue().encode("utf-8")
+
 
 coach_bp = Blueprint("coach", __name__)
 
