@@ -1,5 +1,5 @@
 import os
-import requests  # type: ignore[import-untyped]
+import requests  # type: ignore[import]
 import requests_cache
 from typing import List
 
